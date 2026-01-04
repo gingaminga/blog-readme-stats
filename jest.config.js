@@ -99,6 +99,7 @@ const config = {
     "^@my-types/(.*)$": "<rootDir>/src/types/$1",
     "^@routes/(.*)$": "<rootDir>/src/routes/$1",
     "^@services/(.*)$": "<rootDir>/src/services/$1",
+    "^@templates/(.*)$": "<rootDir>/src/templates/$1",
     "^@utils/(.*)$": "<rootDir>/src/utils/$1",
     "^@validators/(.*)$": "<rootDir>/src/validators/$1",
   },
@@ -213,4 +214,4 @@ const config = {
   // watchman: true,
 };
 
-module.exports = config;
+export default config;
