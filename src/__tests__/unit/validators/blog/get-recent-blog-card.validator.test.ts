@@ -67,7 +67,7 @@ describe("Get recent blog card validator test :)", () => {
 
     // then
     expect(res.locals.requestDTO).toEqual(dto);
-    expect(res.locals.requestDTO.theme).toBe(Theme.LIGHT); // default theme
+    expect(res.locals.requestDTO.theme).toBeUndefined(); // 브라우저 테마 자동 감지
     expect(next).toHaveBeenCalled();
   });
 
