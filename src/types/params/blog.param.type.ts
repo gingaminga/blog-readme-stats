@@ -7,3 +7,7 @@ export interface GetRecentBlogCardParam {
   theme?: Theme;
   url: string;
 }
+
+export interface GetRecentBlogUrlParam {
+  url: string;
+}
