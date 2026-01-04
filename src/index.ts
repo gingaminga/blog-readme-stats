@@ -5,10 +5,15 @@ import logger from "@config/logger.config";
 import { PROJECT } from "@utils/constants";
 import getServer from "@utils/server";
 
-const { PORT } = PROJECT;
+const isVercel = process.env.VERCEL === "1";
 
-const server = getServer(app);
+if (!isVercel) {
+  const { PORT } = PROJECT;
 
-server.listen(PORT, () => {
-  logger.info(`Start service on ${PORT} port!`);
-});
+  const server = getServer(app);
+  server.listen(PORT, () => {
+    logger.info(`Start service on ${PORT} port!`);
+  });
+}
+
+export { default } from "@app";
