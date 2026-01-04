@@ -1,6 +1,7 @@
 import { blogService } from "@config/container.config";
 import GetRecentBlogUrlParamDTO from "@dto/blog/get-recent-blog-url.param.dto";
 import { RequestDTOHandler } from "@my-types/express.type";
+import { HTTP_STATUS_CODE } from "@utils/constants";
 
 /**
  * @description RSS를 읽어 최신 블로그 글의 URL로 리다이렉트하는 컨트롤러
@@ -10,5 +11,5 @@ export const getRecentBlogUrlController: RequestDTOHandler<GetRecentBlogUrlParam
 
   const response = await blogService.getRecentBlogUrl(paramDTO);
 
-  res.redirect(302, response.url);
+  res.redirect(HTTP_STATUS_CODE.MOVED_PERMANENTLY, response.url);
 };
