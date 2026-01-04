@@ -48,11 +48,10 @@ export default [
   {
     ...perfectionist.configs["recommended-alphabetical"],
     rules: {
-      // ...perfectionist.configs["recommended-alphabetical"].rules,
-
+      ...perfectionist.configs["recommended-alphabetical"].rules,
       "perfectionist/sort-imports": [
         "error",
-        { partitionByNewLine: true, newlinesBetween: "ignore", newlinesInside: "ignore" },
+        { newlinesBetween: "ignore", newlinesInside: "ignore", partitionByNewLine: true },
       ],
       "perfectionist/sort-union-types": [
         "error",

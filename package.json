@@ -1,6 +1,6 @@
 {
-  "name": "express-boilerplate",
-  "version": "1.0.1",
+  "name": "blog-readme-stats",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -51,6 +51,7 @@
     "lodash": "^4.17.21",
     "on-finished": "^2.4.1",
     "reflect-metadata": "^0.2.2",
+    "rss-parser": "^3.13.0",
     "supertest": "^7.1.4",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
