@@ -14,12 +14,8 @@
  * 1. container.bind<ServiceClass>(ServiceClass).toSelf().inSingletonScope();
  * 2. export const serviceName = container.get<ServiceClass>(ServiceClass);
  */
-import { InfoService } from "@services/info.service";
 import { Container } from "inversify";
 
 const container = new Container();
-
-container.bind<InfoService>(InfoService).toSelf().inSingletonScope();
-export const infoService = container.get<InfoService>(InfoService);
 
 export default container;
