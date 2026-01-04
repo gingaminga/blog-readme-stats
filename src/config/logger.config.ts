@@ -48,10 +48,17 @@ const logFormat = printf((info) => {
   return `[${colors.bgRedBright(String(logLabel))}] ${colors.whiteBright(String(logTimestamp))} [${level}]: ${message}`;
 });
 
-const logger = winston.createLogger({
-  format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss.SSS" }), label({ label: PROJECT.NAME }), splat(), logFormat),
-  transports: [
-    new winston.transports.Console({ level: PROJECT.NODE_ENV === "production" ? LOG.LEVEL.INFO : LOG.LEVEL.DEBUG }),
+// Vercel 환경 감지
+const isVercel = process.env.VERCEL === "1";
+
+// Transport 설정
+const transports: winston.transport[] = [
+  new winston.transports.Console({ level: PROJECT.NODE_ENV === "production" ? LOG.LEVEL.INFO : LOG.LEVEL.DEBUG }),
+];
+
+// Vercel 환경이 아닐 때만 파일 로그 추가
+if (!isVercel) {
+  transports.push(
     new WinstonDailyLog({
       datePattern: "YYYYMMDD",
       dirname: path.resolve(__dirname, LOG.PATH),
@@ -61,7 +68,12 @@ const logger = winston.createLogger({
       maxSize: LOG.MAX_SIZE,
       zippedArchive: PROJECT.NODE_ENV !== "development",
     }),
-  ],
+  );
+}
+
+const logger = winston.createLogger({
+  format: combine(timestamp({ format: "YYYY-MM-DD HH:mm:ss.SSS" }), label({ label: PROJECT.NAME }), splat(), logFormat),
+  transports,
 });
 
 export default logger;
