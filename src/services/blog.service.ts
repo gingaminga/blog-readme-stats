@@ -1,0 +1,98 @@
+import GetRecentBlogCardParamDTO from "@dto/blog/get-recent-blog-card.param.dto";
+import GetRecentBlogCardResponseDTO from "@dto/blog/get-recent-blog-card.response.dto";
+import { BlogCardData, generateBlogCardSVG } from "@templates/blog-card.template";
+import { stripHtmlTags } from "@utils/text";
+import { injectable } from "inversify";
+import Parser from "rss-parser";
+
+export interface IBlogService {
+  createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO>;
+}
+
+@injectable()
+export class BlogService implements IBlogService {
+  private readonly parser: Parser;
+
+  constructor() {
+    this.parser = new Parser({
+      headers: {
+        Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      },
+    });
+  }
+
+  /**
+   * @description 최신 블로그 글의 정보로 카드 생성
+   */
+  async createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO> {
+    const { theme, url } = params;
+
+    const feed = await this.parseFeed(url);
+
+    const latestPost = feed.items[0];
+    if (!latestPost) {
+      // FIXME: 커스텀 에러 적용 필요
+      throw new Error("RSS 피드에 게시글이 없습니다.");
+    }
+
+    const postData = this.extractPostData(latestPost, feed, url);
+    const svg = generateBlogCardSVG(postData, theme);
+
+    return new GetRecentBlogCardResponseDTO(svg);
+  }
+
+  /**
+   * @description 파비콘 URL 생성
+   */
+  private createFaviconUrl(url: string): string {
+    const urlObj = new URL(url);
+    return `https://www.google.com/s2/favicons?domain=${urlObj.origin}`;
+  }
+
+  /**
+   * @description 블로그 카드 데이터로 변환
+   */
+  private extractPostData(post: Parser.Item, feed: Parser.Output<Parser.Item>, url: string): BlogCardData {
+    const postTitle = post.title || "";
+    const blogName = (feed as { subtitle?: string } & Parser.Output<Parser.Item>).subtitle || feed.title || "";
+    const tags = post.categories || [];
+
+    let description = "No Description";
+    if (post.summary && post.summary.trim()) {
+      description = stripHtmlTags(post.summary);
+    } else if (post.contentSnippet && post.contentSnippet.trim()) {
+      description = post.contentSnippet.trim();
+    } else if (post.content && post.content.trim()) {
+      description = stripHtmlTags(post.content);
+    }
+
+    const dateString = post.pubDate || post.isoDate;
+    const date = dateString
+      ? new Date(dateString).toLocaleDateString("ko-KR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+      : "";
+
+    const faviconUrl = this.createFaviconUrl(url);
+
+    return {
+      blogName,
+      date,
+      description,
+      faviconUrl,
+      postTitle,
+      tags,
+    };
+  }
+
+  /**
+   * @description RSS 피드 파싱
+   */
+  private async parseFeed(url: string): Promise<Parser.Output<Parser.Item>> {
+    return await this.parser.parseURL(url);
+  }
+}

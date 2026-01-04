@@ -14,8 +14,12 @@
  * 1. container.bind<ServiceClass>(ServiceClass).toSelf().inSingletonScope();
  * 2. export const serviceName = container.get<ServiceClass>(ServiceClass);
  */
+import { BlogService } from "@services/blog.service";
 import { Container } from "inversify";
 
 const container = new Container();
+
+container.bind<BlogService>(BlogService).toSelf().inSingletonScope();
+export const blogService = container.get<BlogService>(BlogService);
 
 export default container;
