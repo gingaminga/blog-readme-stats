@@ -1,5 +1,7 @@
 import GetRecentBlogCardParamDTO from "@dto/blog/get-recent-blog-card.param.dto";
 import GetRecentBlogCardResponseDTO from "@dto/blog/get-recent-blog-card.response.dto";
+import GetRecentBlogUrlParamDTO from "@dto/blog/get-recent-blog-url.param.dto";
+import GetRecentBlogUrlResponseDTO from "@dto/blog/get-recent-blog-url.response.dto";
 import { BlogCardData, generateBlogCardSVG } from "@templates/blog-card.template";
 import { HTTP_STATUS_CODE } from "@utils/constants";
 import CError from "@utils/error";
@@ -9,6 +11,7 @@ import Parser from "rss-parser";
 
 export interface IBlogService {
   createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO>;
+  getRecentBlogUrl(params: GetRecentBlogUrlParamDTO): Promise<GetRecentBlogUrlResponseDTO>;
 }
 
 @injectable()
@@ -47,6 +50,30 @@ export class BlogService implements IBlogService {
     const svg = generateBlogCardSVG(postData, theme);
 
     return new GetRecentBlogCardResponseDTO(svg);
+  }
+
+  /**
+   * @description 최신 블로그 글의 URL 반환
+   */
+  async getRecentBlogUrl(params: GetRecentBlogUrlParamDTO): Promise<GetRecentBlogUrlResponseDTO> {
+    const { url } = params;
+
+    let feed: Parser.Output<Parser.Item>;
+    try {
+      feed = await this.parser.parseURL(url);
+    } catch {
+      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
+    }
+
+    const latestPost = feed.items[0];
+    if (!latestPost) {
+      throw new CError("No posts found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
+    }
+    if (!latestPost.link) {
+      throw new CError("Post URL not found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
+    }
+
+    return new GetRecentBlogUrlResponseDTO(latestPost.link);
   }
 
   /**
