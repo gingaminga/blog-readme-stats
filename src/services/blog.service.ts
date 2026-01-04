@@ -59,7 +59,7 @@ export class BlogService implements IBlogService {
     const blogName = (feed as { subtitle?: string } & Parser.Output<Parser.Item>).subtitle || feed.title || "";
     const tags = post.categories || [];
 
-    let description = "No Description";
+    let description = "";
     if (post.summary && post.summary.trim()) {
       description = stripHtmlTags(post.summary);
     } else if (post.contentSnippet && post.contentSnippet.trim()) {
