@@ -1,6 +1,8 @@
 import GetRecentBlogCardParamDTO from "@dto/blog/get-recent-blog-card.param.dto";
 import GetRecentBlogCardResponseDTO from "@dto/blog/get-recent-blog-card.response.dto";
 import { BlogCardData, generateBlogCardSVG } from "@templates/blog-card.template";
+import { HTTP_STATUS_CODE } from "@utils/constants";
+import CError from "@utils/error";
 import { stripHtmlTags } from "@utils/text";
 import { injectable } from "inversify";
 import Parser from "rss-parser";
@@ -29,12 +31,16 @@ export class BlogService implements IBlogService {
   async createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO> {
     const { theme, url } = params;
 
-    const feed = await this.parseFeed(url);
+    let feed: Parser.Output<Parser.Item>;
+    try {
+      feed = await this.parser.parseURL(url);
+    } catch {
+      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
+    }
 
     const latestPost = feed.items[0];
     if (!latestPost) {
-      // FIXME: 커스텀 에러 적용 필요
-      throw new Error("RSS 피드에 게시글이 없습니다.");
+      throw new CError("No posts found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
     }
 
     const postData = this.extractPostData(latestPost, feed, url);
@@ -87,12 +93,5 @@ export class BlogService implements IBlogService {
       postTitle,
       tags,
     };
-  }
-
-  /**
-   * @description RSS 피드 파싱
-   */
-  private async parseFeed(url: string): Promise<Parser.Output<Parser.Item>> {
-    return await this.parser.parseURL(url);
   }
 }
