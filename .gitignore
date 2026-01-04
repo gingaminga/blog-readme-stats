@@ -1,0 +1,15 @@
+dist
+node_modules
+
+# env files
+.env*
+!.env.sample
+
+# log files
+logs
+
+# test files
+coverage
+
+# lint
+.eslintcache

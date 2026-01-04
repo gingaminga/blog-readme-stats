@@ -1,0 +1,25 @@
+#!/bin/sh
+
+if [ "$2" = "merge" ] || [ "$2" = "squash" ]; then
+  exit 0
+fi
+
+# 브랜치명과 지라 이슈 번호 가져오기
+branch_name=$(git rev-parse --abbrev-ref HEAD)
+jira_issue=$(echo "$branch_name" | grep -oE '[A-Z]+-[0-9]+' || true)
+
+# 커밋 메시지 파일 경로
+commit_msg_file=$1
+
+# 커밋 메시지 파일 내용 가져오기
+commit_msg=$(cat "$commit_msg_file")
+
+# 커밋 메시지 타입 추출
+type=$(echo "$commit_msg" | sed -nE 's/^([a-z]+):.*/\1/p')
+
+# 이슈 번호와 이모지를 추가
+if [ -n "$jira_issue" ]; then
+  echo "[$jira_issue] $commit_msg" > "$commit_msg_file"
+else
+  echo "$commit_msg" > "$commit_msg_file"
+fi

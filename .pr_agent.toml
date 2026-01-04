@@ -1,0 +1,7 @@
+# https://github.com/qodo-ai/pr-agent/blob/main/pr_agent/settings/configuration.toml
+
+[config]
+response_language = "ko-KR"
+
+[github_app]
+handle_push_trigger = true

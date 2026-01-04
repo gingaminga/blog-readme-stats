@@ -1,0 +1,83 @@
+name: Auto PR
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+on:
+  push:
+    branches:
+      - "feature/WOWME-*"
+      - "fix/WOWME-*"
+      - "hotfix/WOWME-*"
+
+jobs:
+  auto-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 브랜치명에서 지라 이슈키 추출
+        run: |
+          branch="${GITHUB_REF#refs/heads/}"
+          echo "branch=$branch" >> $GITHUB_ENV
+          if [[ "$branch" =~ ([A-Z]+-[0-9]+) ]]; then
+            echo "issue_key=${BASH_REMATCH[1]}" >> $GITHUB_ENV
+          else
+            echo "issue_key=" >> $GITHUB_ENV
+          fi
+
+      - name: 지라 이슈 제목 가져오기
+        if: env.issue_key != ''
+        run: |
+          jira_response=$(curl -s -u "${{ vars.JIRA_EMAIL }}:${{ secrets.JIRA_TOKEN }}" \
+            -H "Accept: application/json" \
+            "https://gingaminga.atlassian.net/rest/api/3/issue/${{ env.issue_key }}")
+          title=$(echo "$jira_response" | jq -r '.fields.summary')
+          echo "jira_title=$title" >> $GITHUB_ENV
+
+      - name: PR 생성하기
+        uses: thomaseizinger/create-pull-request@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          head: ${{ github.ref_name }}
+          base: develop
+          title: "[${{ env.issue_key }}] ${{ env.jira_title }}"
+          body: |
+            자동 생성된 PR입니다.
+            - 지라이슈: ${{ env.issue_key }}
+
+      - name: PR에 Assignee 추가하기
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { repo, owner } = context.repo;
+            const prList = await github.rest.pulls.list({
+              owner,
+              repo,
+              head: `${owner}:${process.env.branch}`,
+              state: 'open'
+            });
+
+            if (prList.data.length > 0) {
+              const prNumber = prList.data[0].number;
+
+              // Assignee 추가
+              await github.rest.issues.addAssignees({
+                owner,
+                repo,
+                issue_number: prNumber,
+                assignees: [owner]
+              });
+
+              console.log(`Assignee를 ${owner}로 추가 완료 :)`);
+            } else {
+              console.log("PR을 찾지 못했습니다. :(");
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          branch: ${{ github.ref_name }}
