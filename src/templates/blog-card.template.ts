@@ -53,7 +53,7 @@ export function generateBlogCardSVG(data: BlogCardData, theme: Theme = Theme.LIG
 
       const tagElement = `
       <rect x="${tagX}" y="91" width="${tagWidth}" height="24" rx="12" fill="${colors.tagBgColor}"${tagOpacity}/>
-      <text x="${tagX + tagWidth / 2}" y="107" font-family="'Noto Sans KR', 'Segoe UI', Ubuntu, sans-serif" font-size="12" font-weight="400" fill="${colors.textColor}" text-anchor="middle">${escapeXml(truncateText(tag, 15))}</text>
+      <text x="${tagX + tagWidth / 2}" y="107" font-size="12" font-weight="400" fill="${colors.textColor}" text-anchor="middle">${escapeXml(truncateText(tag, 15))}</text>
     `;
       tagX += tagWidth + 8;
 
@@ -63,9 +63,6 @@ export function generateBlogCardSVG(data: BlogCardData, theme: Theme = Theme.LIG
 
   const svg = `<svg width="450" height="150" viewBox="0 0 450 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&amp;display=swap');
-    </style>
     <clipPath id="faviconClip">
       <circle cx="420" cy="131" r="8"/>
     </clipPath>
@@ -107,12 +104,12 @@ export function generateBlogCardSVG(data: BlogCardData, theme: Theme = Theme.LIG
   ${tagElements.join("")}
   
   <!-- 작성 날짜 -->
-  <text x="20" y="135" font-family="'Segoe UI', Ubuntu, sans-serif" font-size="12" font-weight="400" fill="${colors.textColor}">
+  <text x="20" y="135" font-size="12" font-weight="400" fill="${colors.textColor}">
     ${escapeXml(date)}
   </text>
   
   <!-- 블로그명 -->
-  <text x="402" y="135" font-family="'Segoe UI', Ubuntu, sans-serif" font-size="12" font-weight="400" fill="${colors.textColor}" text-anchor="end">
+  <text x="402" y="135" font-size="12" font-weight="400" fill="${colors.textColor}" text-anchor="end">
     ${escapeXml(blogName)}
   </text>
   
