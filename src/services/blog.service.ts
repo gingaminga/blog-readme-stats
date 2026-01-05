@@ -121,7 +121,7 @@ export class BlogService implements IBlogService {
   private async getFaviconBuffer(url?: string): Promise<ArrayBuffer> {
     try {
       if (!url) {
-        throw new Error("URL is undefined.");
+        return new ArrayBuffer(0);
       }
 
       const faviconUrl = `https://www.google.com/s2/favicons?domain=${url}`;
