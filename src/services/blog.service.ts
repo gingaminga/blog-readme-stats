@@ -124,9 +124,7 @@ export class BlogService implements IBlogService {
         throw new Error("URL is undefined.");
       }
 
-      const urlObj = new URL(url);
-
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${urlObj.origin}`;
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${url}`;
       const faviconRes = await fetch(faviconUrl);
       const buffer = await faviconRes.arrayBuffer();
 
