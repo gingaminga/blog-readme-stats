@@ -5,7 +5,7 @@ export interface BlogCardData {
   blogName: string;
   date: string;
   description: string;
-  faviconUrl: string;
+  faviconBuffer: ArrayBuffer;
   postTitle: string;
   tags: string[];
 }
@@ -39,7 +39,7 @@ const DARK_THEME: ThemeColors = {
  * @param theme - undefined일 경우 브라우저의 prefers-color-scheme 사용
  */
 export function generateBlogCardSVG(data: BlogCardData, theme?: Theme): string {
-  const { blogName, date, description, faviconUrl, postTitle, tags } = data;
+  const { blogName, date, description, faviconBuffer, postTitle, tags } = data;
 
   // 스타일 생성
   let styleContent = "";
@@ -104,12 +104,31 @@ export function generateBlogCardSVG(data: BlogCardData, theme?: Theme): string {
     })
     .filter((el) => el !== "");
 
+  /* 파비콘 처리 영역 */
+  const hasFavicon = faviconBuffer.byteLength > 0;
+  const faviconBase64 = hasFavicon ? Buffer.from(faviconBuffer).toString("base64") : "";
+  const blogNameX = hasFavicon ? 402 : 430; // 파비콘이 있을 때 블로그명을 오른쪽으로 이동
+
+  const faviconClipPath = hasFavicon
+    ? `<defs>
+      <clipPath id="faviconClip">
+        <circle cx="420" cy="131" r="8"/>
+      </clipPath>
+      </defs>
+    `
+    : "";
+
+  const faviconElements = hasFavicon
+    ? `
+  <!-- 파비콘 배경 (원형) -->
+  <circle cx="420" cy="131" r="8" fill="#ffffff" stroke="var(--border-color)" stroke-width="1"/>
+  
+  <!-- 파비콘 -->
+  <image x="412" y="123" width="16" height="16" href="data:image/png;base64,${faviconBase64}" clip-path="url(#faviconClip)"/>`
+    : "";
+
   return `<svg width="450" height="150" viewBox="0 0 450 150" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <defs>
-    <clipPath id="faviconClip">
-      <circle cx="420" cy="131" r="8"/>
-    </clipPath>
-  </defs>
+  ${faviconClipPath}
   ${styleContent}
   
   <!-- 배경 -->
@@ -153,14 +172,9 @@ export function generateBlogCardSVG(data: BlogCardData, theme?: Theme): string {
   </text>
   
   <!-- 블로그명 -->
-  <text x="402" y="135" font-size="12" font-weight="400" fill="var(--text-color)" text-anchor="end">
+  <text x="${blogNameX}" y="135" font-size="12" font-weight="400" fill="var(--text-color)" text-anchor="end">
     ${escapeXml(blogName)}
   </text>
-  
-  <!-- 파비콘 배경 (원형) -->
-  <circle cx="420" cy="131" r="8" fill="#ffffff" stroke="var(--border-color)" stroke-width="1"/>
-  
-  <!-- 파비콘 -->
-  <image x="412" y="123" width="16" height="16" xlink:href="${faviconUrl}" clip-path="url(#faviconClip)"/>
+  ${faviconElements}
 </svg>`;
 }

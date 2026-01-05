@@ -1,3 +1,4 @@
+import logger from "@config/logger.config";
 import GetRecentBlogCardParamDTO from "@dto/blog/get-recent-blog-card.param.dto";
 import GetRecentBlogCardResponseDTO from "@dto/blog/get-recent-blog-card.response.dto";
 import GetRecentBlogUrlParamDTO from "@dto/blog/get-recent-blog-url.param.dto";
@@ -46,7 +47,7 @@ export class BlogService implements IBlogService {
       throw new CError("No posts found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
     }
 
-    const postData = this.extractPostData(latestPost, feed, url);
+    const postData = await this.extractPostData(latestPost, feed, url);
     const svg = generateBlogCardSVG(postData, theme);
 
     return new GetRecentBlogCardResponseDTO(svg);
@@ -77,17 +78,13 @@ export class BlogService implements IBlogService {
   }
 
   /**
-   * @description 파비콘 URL 생성
-   */
-  private createFaviconUrl(url: string): string {
-    const urlObj = new URL(url);
-    return `https://www.google.com/s2/favicons?domain=${urlObj.origin}`;
-  }
-
-  /**
    * @description 블로그 카드 데이터로 변환
    */
-  private extractPostData(post: Parser.Item, feed: Parser.Output<Parser.Item>, url: string): BlogCardData {
+  private async extractPostData(
+    post: Parser.Item,
+    feed: Parser.Output<Parser.Item>,
+    url: string,
+  ): Promise<BlogCardData> {
     const postTitle = post.title || "";
     const blogName = (feed as { subtitle?: string } & Parser.Output<Parser.Item>).subtitle || feed.title || "";
     const tags = post.categories || [];
@@ -110,15 +107,33 @@ export class BlogService implements IBlogService {
         })
       : "";
 
-    const faviconUrl = this.createFaviconUrl(url);
+    const faviconBuffer = await this.getFaviconBuffer(url);
 
     return {
       blogName,
       date,
       description,
-      faviconUrl,
+      faviconBuffer,
       postTitle,
       tags,
     };
+  }
+
+  /**
+   * @description 파비콘 버퍼 가져오기
+   */
+  private async getFaviconBuffer(url: string): Promise<ArrayBuffer> {
+    try {
+      const urlObj = new URL(url);
+
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${urlObj.origin}`;
+      const faviconRes = await fetch(faviconUrl);
+      const buffer = await faviconRes.arrayBuffer();
+
+      return buffer;
+    } catch (error) {
+      logger.error(error);
+      return new ArrayBuffer(0);
+    }
   }
 }
