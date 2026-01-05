@@ -47,7 +47,7 @@ export class BlogService implements IBlogService {
       throw new CError("No posts found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
     }
 
-    const postData = await this.extractPostData(latestPost, feed, url);
+    const postData = await this.extractPostData(latestPost, feed);
     const svg = generateBlogCardSVG(postData, theme);
 
     return new GetRecentBlogCardResponseDTO(svg);
@@ -80,11 +80,7 @@ export class BlogService implements IBlogService {
   /**
    * @description 블로그 카드 데이터로 변환
    */
-  private async extractPostData(
-    post: Parser.Item,
-    feed: Parser.Output<Parser.Item>,
-    url: string,
-  ): Promise<BlogCardData> {
+  private async extractPostData(post: Parser.Item, feed: Parser.Output<Parser.Item>): Promise<BlogCardData> {
     const postTitle = post.title || "";
     const blogName = (feed as { subtitle?: string } & Parser.Output<Parser.Item>).subtitle || feed.title || "";
     const tags = post.categories || [];
@@ -107,7 +103,7 @@ export class BlogService implements IBlogService {
         })
       : "";
 
-    const faviconBuffer = await this.getFaviconBuffer(url);
+    const faviconBuffer = await this.getFaviconBuffer(feed.link);
 
     return {
       blogName,
@@ -122,11 +118,13 @@ export class BlogService implements IBlogService {
   /**
    * @description 파비콘 버퍼 가져오기
    */
-  private async getFaviconBuffer(url: string): Promise<ArrayBuffer> {
+  private async getFaviconBuffer(url?: string): Promise<ArrayBuffer> {
     try {
-      const urlObj = new URL(url);
+      if (!url) {
+        return new ArrayBuffer(0);
+      }
 
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${urlObj.origin}`;
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${url}`;
       const faviconRes = await fetch(faviconUrl);
       const buffer = await faviconRes.arrayBuffer();
 

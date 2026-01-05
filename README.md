@@ -1,171 +1,117 @@
-# Express Boilerplate
+# blog-readme-stats
 
-> TypeScript 기반의 Express 서버 보일러플레이트입니다.  
-> 새로운 프로젝트를 빠르게 시작할 수 있도록 필수 설정과 구조를 제공합니다.
+> 블로그 RSS 피드를 활용해 GitHub README를 멋지게 꾸며보세요!
 
-## 🚀 빠른 시작 (Quick Start)
+## 📖 소개
 
-### 1️⃣ 저장소 Clone
+`blog-readme-stats`는 블로그의 최신 포스트 정보를 SVG 카드로 생성하여 GitHub README에 표시할 수 있는 서비스입니다.
 
-```bash
-# 프로젝트 복제
-git clone https://github.com/gingaminga/express-boilerplate.git
+RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)에서 사용할 수 있습니다.
 
+## 🚀 사용 방법
+
+### 최신 글 카드
+
+블로그의 최신 포스트를 카드 형태로 표시할 수 있습니다.
+
+> `?url=` 파라미터에 블로그의 RSS 피드 URL을 입력하세요.
+
+#### 기본 사용법
+
+**카드만 표시:**
+
+```markdown
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)
 ```
 
-### 2️⃣ Git 히스토리 초기화
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)
 
-```bash
-# 기존 Git 히스토리 제거
-rm -rf .git
+**링크와 함께 사용 (카드 클릭 시 링크로 이동):**
 
-# 새로운 Git 저장소 초기화
-git init
-
-# 연결할 저장소 설정
-git remote add origin [저장소 주소]
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://dev-gingaminga.tistory.com)
 ```
 
-### 3️⃣ 프로젝트 정보 수정
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://dev-gingaminga.tistory.com)
 
-`package.json` 파일에서 프로젝트 정보를 수정하세요:
+**최신 글 링크와 함께 사용 (카드 클릭 시 최신 글로 이동):**
 
-- `name`: 프로젝트 이름
-- `version`: 버전
-- `description`: 프로젝트 설명
-- `author`: 작성자
+`https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=YOUR_RSS_FEED_URL`는 가장 최신 글의 URL을 반환합니다.
 
-### 4️⃣ 의존성 설치
-
-```bash
-npm install
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=https://dev-gingaminga.tistory.com/rss)
 ```
 
-### 5️⃣ 개발 서버 실행
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=https://dev-gingaminga.tistory.com/rss)
 
-```bash
-npm run dev
+#### 다크/라이트 테마 지정
+
+> 옵션: `&theme=dark` 또는 `&theme=light`
+
+테마를 지정하지 않으면 시스템 설정에 따라 자동으로 테마가 적용됩니다.
+테마를 지정하고 싶다면 아래처럼 사용하세요.
+
+**다크 테마:**
+
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=dark)](https://dev-gingaminga.tistory.com)
 ```
 
-**완료!  
-🎉** 이제 `http://localhost:3001`에서 서버가 실행됩니다.
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=dark)
 
----
+**라이트 테마:**
 
-## ✨ 주요 특징
-
-- ✅ **TypeScript** 기반 타입 안정성
-- ✅ **의존성 주입(DI)** - Inversify 적용
-- ✅ **계층형 아키텍처** - Controller/Service/Route 분리
-- ✅ **통합 에러 핸들링** - 커스텀 에러 처리
-- ✅ **요청/응답 로깅** - Winston 기반
-- ✅ **표준 응답 포맷** - 일관된 API 응답 구조
-- ✅ **유효성 검사** - Joi 스키마 기반
-- ✅ **테스트 환경** - Jest + Supertest
-- ✅ **코드 품질** - ESLint + Prettier + Husky
-- ✅ **핫 리로딩** - Nodemon 개발 환경
-
-## ⚒️ 기술 스택
-
-<img src="https://img.shields.io/badge/Typescript-blue?style=flat&logo=typescript&logoColor=white"/> <img src="https://img.shields.io/badge/Express-green?style=flat&logo=express&logoColor=white"/> <img src="https://img.shields.io/badge/Inversify-red?style=flat&logo=inversify&logoColor=white"/> <img src="https://img.shields.io/badge/Winston-purple?style=flat&logo=winston&logoColor=white"/> <img src="https://img.shields.io/badge/Nodemon-yellow?style=flat&logo=nodemon&logoColor=white"/> <img src="https://img.shields.io/badge/Jest-orange?style=flat&logo=jest&logoColor=white"/> <img src="https://img.shields.io/badge/Prettier-purple?style=flat&logo=prettier&logoColor=white"/> <img src="https://img.shields.io/badge/ESLint-orange?style=flat&logo=eslint&logoColor=white"/>
-
-## 📝 사용 가능한 명령어
-
-```bash
-# 개발 모드 실행
-npm run dev
-
-# 프로덕션 빌드
-npm run build
-
-# 테스트 실행
-npm run test
-
-# 테스트 watch 모드
-npm run test:dev
-
-# 테스트 캐시 삭제
-npm run test:clean
-
-# ESLint 실행
-npm run eslint
-
-# Prettier 포맷팅
-npm run prettier
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=light)](https://dev-gingaminga.tistory.com)
 ```
 
-> 자세한 스크립트 내용은 `package.json`의 `scripts` 섹션을 확인하세요.
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=light)
 
-## 🔧 환경 변수 설정
+## 🎨 카드 정보
 
-`.env` 파일이 없어도 기본값으로 실행됩니다.  
-프로젝트 설정을 변경하려면 프로젝트 루트에 `.env` 파일을 생성하세요.
+생성되는 SVG 카드에는 다음 정보가 표시됩니다:
 
-```bash
-# .env 파일 생성
-touch .env
-```
+- 📝 포스트 제목
+- 📄 포스트 설명 (최대 2줄)
+- 🏷️ 태그 (최대 3개)
+- 📅 작성일
+- 🌐 블로그 이름
+- 🎨 블로그 파비콘 (없으면 미노출)
 
-### 환경별 설정 파일
+## 💡 RSS 주소
 
-환경에 따라 다른 설정을 사용하려면 아래 파일을 생성하세요:
+블로그 플랫폼마다 RSS 피드 URL 형식이 다릅니다.  
+아래 형식을 참고하여 본인의 블로그 RSS 주소를 사용하세요.
 
-- `.env.development` - 개발 환경
-- `.env.test` - 테스트 환경
-- `.env.production` - 프로덕션 환경
-
-> 환경별 파일이 없으면 `.env` 파일을 참조합니다.
-
-## 📁 프로젝트 구조
+**Tistory**
 
 ```
-src/
-├── __tests__/          # 테스트 코드
-│   ├── integration/    # 통합 테스트
-│   └── unit/          # 단위 테스트
-├── config/            # 설정 파일 (DI, Logger, Env 등)
-├── controllers/       # 컨트롤러 (비즈니스 로직 호출)
-├── dto/              # Data Transfer Object
-├── loaders/          # 초기화 로더
-├── middlewares/      # Express 미들웨어
-├── routes/           # API 라우트 정의
-├── services/         # 비즈니스 로직
-├── types/            # TypeScript 타입 정의
-├── utils/            # 유틸리티 함수
-├── validators/       # Joi 유효성 검사
-├── app.ts           # Express 앱 설정
-└── index.ts         # 서버 진입점
+https://[블로그주소]/rss
 ```
 
-## 🏗️ 아키텍처
-
-이 보일러플레이트는 계층형 아키텍처를 따릅니다:
+**Medium**
 
 ```
-Request → Middleware → Route → Validator → Controller → Service → Response
+https://medium.com/feed/[유저명]
 ```
 
-1. **Route**: API 엔드포인트 정의
-2. **Validator**: 요청 데이터 유효성 검사 (Joi)
-3. **Controller**: 요청/응답 처리
-4. **Service**: 비즈니스 로직 수행
-5. **Middleware**: 로깅, 에러 처리, 응답 포맷 등
+**Naver 블로그**
 
-## 📦 새로운 기능 추가하기
+```
+https://rss.blog.naver.com/[블로그ID].xml
+```
 
-프로젝트 내에 `info` 관련 예시 코드가 구현되어 있습니다.  
-아래 파일들을 참고하여 새로운 기능을 추가하세요:
+**Velog**
 
-- **Service**: `src/services/info.service.ts`
-- **Controller**: `src/controllers/info/check-info.controller.ts`
-- **DTO**: `src/dto/info/`
-- **Validator**: `src/validators/info/check-info.validator.ts`
-- **Route**: `src/routes/info.route.ts`
+```
+https://v2.velog.io/rss/[유저명]
+```
 
-## 🧪 테스트 작성
+**기타 블로그**
 
-프로젝트 내에 테스트 예시가 구현되어 있습니다.  
-아래 파일들을 참고하여 테스트를 작성하세요:
+대부분의 블로그는 `/rss`, `/feed`, `/atom` 등의 경로로 RSS를 제공합니다.  
+블로그 설정 또는 문서에서 RSS 피드 URL을 확인하세요.
 
-- **Unit Test**: `src/__tests__/unit/services/info.service.test.ts`
-- **Integration Test**: `src/__tests__/integration/api/info.test.ts`
+## 🤝 기여
+
+이슈와 PR은 언제나 환영합니다!
