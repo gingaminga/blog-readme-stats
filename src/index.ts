@@ -13,6 +13,7 @@ if (!isVercel) {
   const server = getServer(app);
   server.listen(PORT, () => {
     logger.info(`Start service on ${PORT} port!`);
+    console.log("zzzzz");
   });
 }
 
