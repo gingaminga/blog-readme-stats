@@ -1,4 +1,6 @@
 import logger from "@config/logger.config";
+import GetPickBlogCardParamDTO from "@dto/blog/get-pick-blog-card.param.dto";
+import GetPickBlogCardResponseDTO from "@dto/blog/get-pick-blog-card.response.dto";
 import GetRecentBlogCardParamDTO from "@dto/blog/get-recent-blog-card.param.dto";
 import GetRecentBlogCardResponseDTO from "@dto/blog/get-recent-blog-card.response.dto";
 import GetRecentBlogUrlParamDTO from "@dto/blog/get-recent-blog-url.param.dto";
@@ -11,6 +13,7 @@ import { injectable } from "inversify";
 import Parser from "rss-parser";
 
 export interface IBlogService {
+  createPickBlogCard(params: GetPickBlogCardParamDTO): Promise<GetPickBlogCardResponseDTO>;
   createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO>;
   getRecentBlogUrl(params: GetRecentBlogUrlParamDTO): Promise<GetRecentBlogUrlResponseDTO>;
 }
@@ -27,6 +30,30 @@ export class BlogService implements IBlogService {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       },
     });
+  }
+
+  /**
+   * @description RSS에서 특정 URL의 블로그 글을 찾아 카드 생성
+   */
+  async createPickBlogCard(params: GetPickBlogCardParamDTO): Promise<GetPickBlogCardResponseDTO> {
+    const { postUrl, rss, theme } = params;
+
+    let feed: Parser.Output<Parser.Item>;
+    try {
+      feed = await this.parser.parseURL(rss);
+    } catch {
+      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
+    }
+
+    const targetPost = feed.items.find((item) => item.link === postUrl);
+    if (!targetPost) {
+      throw new CError("Post not found in the RSS feed", HTTP_STATUS_CODE.NOT_FOUND);
+    }
+
+    const postData = await this.extractPostData(targetPost, feed);
+    const svg = generateBlogCardSVG(postData, theme);
+
+    return new GetPickBlogCardResponseDTO(svg);
   }
 
   /**
