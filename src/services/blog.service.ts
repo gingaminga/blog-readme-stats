@@ -38,12 +38,7 @@ export class BlogService implements IBlogService {
   async createPickBlogCard(params: GetPickBlogCardParamDTO): Promise<GetPickBlogCardResponseDTO> {
     const { postUrl, rss, theme } = params;
 
-    let feed: Parser.Output<Parser.Item>;
-    try {
-      feed = await this.parser.parseURL(rss);
-    } catch {
-      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
-    }
+    const feed = await this.parseRssFeed(rss);
 
     const targetPost = feed.items.find((item) => item.link === postUrl);
     if (!targetPost) {
@@ -62,12 +57,7 @@ export class BlogService implements IBlogService {
   async createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO> {
     const { theme, url } = params;
 
-    let feed: Parser.Output<Parser.Item>;
-    try {
-      feed = await this.parser.parseURL(url);
-    } catch {
-      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
-    }
+    const feed = await this.parseRssFeed(url);
 
     const latestPost = feed.items[0];
     if (!latestPost) {
@@ -86,12 +76,7 @@ export class BlogService implements IBlogService {
   async getRecentBlogUrl(params: GetRecentBlogUrlParamDTO): Promise<GetRecentBlogUrlResponseDTO> {
     const { url } = params;
 
-    let feed: Parser.Output<Parser.Item>;
-    try {
-      feed = await this.parser.parseURL(url);
-    } catch {
-      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
-    }
+    const feed = await this.parseRssFeed(url);
 
     const latestPost = feed.items[0];
     if (!latestPost) {
@@ -159,6 +144,17 @@ export class BlogService implements IBlogService {
     } catch (error) {
       logger.error(error);
       return new ArrayBuffer(0);
+    }
+  }
+
+  /**
+   * @description RSS 피드 파싱
+   */
+  private async parseRssFeed(url: string): Promise<Parser.Output<Parser.Item>> {
+    try {
+      return await this.parser.parseURL(url);
+    } catch {
+      throw new CError("Not a valid RSS feed URL", HTTP_STATUS_CODE.BAD_REQUEST);
     }
   }
 }
