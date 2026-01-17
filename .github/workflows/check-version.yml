@@ -1,0 +1,40 @@
+name: Check Package Version
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 체크아웃 (PR 브랜치)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          path: pr-branch
+
+      - name: 체크아웃 (main 브랜치)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-branch
+
+      - name: package.json 버전 비교
+        run: |
+          # PR 브랜치의 버전 추출
+          pr_version=$(jq -r '.version' pr-branch/package.json)
+          echo "PR 브랜치 버전: $pr_version"
+
+          # main 브랜치의 버전 추출
+          main_version=$(jq -r '.version' main-branch/package.json)
+          echo "main 브랜치 버전: $main_version"
+
+          # 버전 비교
+          if [ "$pr_version" == "$main_version" ]; then
+            echo "❌ package.json의 버전이 변경되지 않았습니다."
+            exit 1
+          else
+            echo "✅ package.json의 버전이 업데이트되었습니다."
+          fi
