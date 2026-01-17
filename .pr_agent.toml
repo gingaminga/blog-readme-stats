@@ -2,6 +2,11 @@
 
 [config]
 response_language = "ko-KR"
+ignore_pr_source_branches = ["develop", "main"]
 
 [github_app]
 handle_push_trigger = true
+pr_commands = [
+   "/describe",
+   "/review"
+]

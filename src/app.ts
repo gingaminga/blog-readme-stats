@@ -1,3 +1,4 @@
+import analyticsMiddleware from "@middlewares/analytics.middleware";
 import errorHandlerMiddleware from "@middlewares/error-handler.middleware";
 import notFoundMiddleware from "@middlewares/not-found.middleware";
 import requestLoggingMiddleware from "@middlewares/request-logging.middleware";
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(analyticsMiddleware);
 app.use(requestLoggingMiddleware);
 app.use(responseFormatMiddleware);
 app.use(cors(CORS_CONFIG));
