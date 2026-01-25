@@ -3,6 +3,11 @@ export const enum Theme {
   LIGHT = "light",
 }
 
+export interface GetListBlogCardParam {
+  rss: string;
+  theme?: Theme;
+}
+
 export interface GetPickBlogCardParam {
   postUrl: string;
   rss: string;

@@ -1,4 +1,6 @@
 import logger from "@config/logger.config";
+import GetListBlogCardParamDTO from "@dto/blog/get-list-blog-card.param.dto";
+import GetListBlogCardResponseDTO from "@dto/blog/get-list-blog-card.response.dto";
 import GetPickBlogCardParamDTO from "@dto/blog/get-pick-blog-card.param.dto";
 import GetPickBlogCardResponseDTO from "@dto/blog/get-pick-blog-card.response.dto";
 import GetRecentBlogCardParamDTO from "@dto/blog/get-recent-blog-card.param.dto";
@@ -6,6 +8,7 @@ import GetRecentBlogCardResponseDTO from "@dto/blog/get-recent-blog-card.respons
 import GetRecentBlogUrlParamDTO from "@dto/blog/get-recent-blog-url.param.dto";
 import GetRecentBlogUrlResponseDTO from "@dto/blog/get-recent-blog-url.response.dto";
 import { BlogCardData, generateBlogCardSVG } from "@templates/blog-card.template";
+import { BlogListCardData, generateBlogListCardSVG } from "@templates/list-blog-card.template";
 import { HTTP_STATUS_CODE } from "@utils/constants";
 import CError from "@utils/error";
 import { stripHtmlTags } from "@utils/text";
@@ -13,6 +16,7 @@ import { injectable } from "inversify";
 import Parser from "rss-parser";
 
 export interface IBlogService {
+  createListBlogCard(params: GetListBlogCardParamDTO): Promise<GetListBlogCardResponseDTO>;
   createPickBlogCard(params: GetPickBlogCardParamDTO): Promise<GetPickBlogCardResponseDTO>;
   createRecentBlogCard(params: GetRecentBlogCardParamDTO): Promise<GetRecentBlogCardResponseDTO>;
   getRecentBlogUrl(params: GetRecentBlogUrlParamDTO): Promise<GetRecentBlogUrlResponseDTO>;
@@ -31,6 +35,45 @@ export class BlogService implements IBlogService {
       },
       timeout: 10_000, // 10초 타임아웃
     });
+  }
+
+  /**
+   * @description RSS에서 최신 블로그 글 목록으로 리스트 카드 생성
+   */
+  async createListBlogCard(params: GetListBlogCardParamDTO): Promise<GetListBlogCardResponseDTO> {
+    const { rss, theme } = params;
+
+    const feed = await this.parseRssFeed(rss);
+
+    if (!feed.items || feed.items.length === 0) {
+      throw new CError("No posts found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
+    }
+
+    // 최대 5개
+    const posts = feed.items.slice(0, 5).map((item) => {
+      const postTitle = item.title || "";
+      const tags = item.categories || [];
+      const date = this.formatDate(item.pubDate || item.isoDate);
+
+      return {
+        date,
+        postTitle,
+        tags,
+      };
+    });
+
+    const blogName = this.getBlogName(feed);
+    const faviconBuffer = await this.getFaviconBuffer(feed.link);
+
+    const listData: BlogListCardData = {
+      blogName,
+      faviconBuffer,
+      posts,
+    };
+
+    const svg = generateBlogListCardSVG(listData, theme);
+
+    return new GetListBlogCardResponseDTO(svg);
   }
 
   /**
@@ -95,7 +138,7 @@ export class BlogService implements IBlogService {
    */
   private async extractPostData(post: Parser.Item, feed: Parser.Output<Parser.Item>): Promise<BlogCardData> {
     const postTitle = post.title || "";
-    const blogName = (feed as { subtitle?: string } & Parser.Output<Parser.Item>).subtitle || feed.title || "";
+    const blogName = this.getBlogName(feed);
     const tags = post.categories || [];
 
     let description = "";
@@ -107,15 +150,7 @@ export class BlogService implements IBlogService {
       description = stripHtmlTags(post.content);
     }
 
-    const dateString = post.pubDate || post.isoDate;
-    const date = dateString
-      ? new Date(dateString).toLocaleDateString("ko-KR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })
-      : "";
-
+    const date = this.formatDate(post.pubDate || post.isoDate);
     const faviconBuffer = await this.getFaviconBuffer(feed.link);
 
     return {
@@ -126,6 +161,28 @@ export class BlogService implements IBlogService {
       postTitle,
       tags,
     };
+  }
+
+  /**
+   * @description 날짜 포맷팅
+   */
+  private formatDate(dateString?: string) {
+    return dateString
+      ? new Date(dateString).toLocaleDateString("ko-KR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
+      : "";
+  }
+
+  /**
+   * @description 블로그 이름 추출
+   */
+  private getBlogName(feed: Parser.Output<Parser.Item>): string {
+    if ("subtitle" in feed && typeof feed.subtitle === "string") return feed.subtitle;
+
+    return feed.title || "";
   }
 
   /**
