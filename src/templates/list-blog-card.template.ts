@@ -175,7 +175,7 @@ export function generateBlogListCardSVG(data: BlogListCardData, theme?: Theme): 
     <!-- 제목 -->
     <foreignObject x="20" y="${yOffset + 5}" width="410" height="20">
       <div xmlns="http://www.w3.org/1999/xhtml" style="
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 600;
         color: var(--text-color);
         overflow: hidden;
