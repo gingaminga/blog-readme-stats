@@ -25,17 +25,17 @@ interface ThemeColors {
 const LIGHT_THEME: ThemeColors = {
   bgColor: "#ffffff",
   borderColor: "#E5E7EB",
-  dateColor: "#959595",
+  dateColor: "#6B7280",
   dividerColor: "#E5E7EB",
   tagBgColor: "#F3F4F6",
   textColor: "#000000",
 };
 
 const DARK_THEME: ThemeColors = {
-  bgColor: "#202830",
+  bgColor: "#1F2830",
   borderColor: "#31373D",
   dateColor: "#959595",
-  dividerColor: "#31373D",
+  dividerColor: "#374151",
   tagBgColor: "#6366F1",
   textColor: "#F9FAFB",
 };
