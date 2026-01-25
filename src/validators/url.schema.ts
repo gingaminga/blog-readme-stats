@@ -1,5 +1,3 @@
-import { HTTP_STATUS_CODE } from "@utils/constants";
-import CError from "@utils/error";
 import { isIPAddress, isLocalhostHostname } from "@utils/url";
 import Joi from "joi";
 
@@ -9,30 +7,30 @@ import Joi from "joi";
  * - 모든 IP 주소 차단
  * - localhost 차단
  */
-const joiSafeUrlValidator = (value: string) => {
+const joiSafeUrlValidator = (value: string, helpers: Joi.CustomHelpers<string>) => {
   let url: URL;
   try {
     url = new URL(value);
   } catch {
-    throw new CError("Invalid URL format", HTTP_STATUS_CODE.BAD_REQUEST);
+    return helpers.error("string.uri");
   }
 
   // 1. 허용된 스킴 검사
   const allowedSchemes = ["http:", "https:"];
   if (!allowedSchemes.includes(url.protocol)) {
-    throw new CError("Only http and https protocols are allowed", HTTP_STATUS_CODE.BAD_REQUEST);
+    return helpers.error("string.ssrfUnsafe");
   }
 
   const hostname = url.hostname;
 
   // 2. localhost 차단
   if (isLocalhostHostname(hostname)) {
-    throw new CError("Localhost URLs are not allowed", HTTP_STATUS_CODE.BAD_REQUEST);
+    return helpers.error("string.ssrfUnsafe");
   }
 
   // 3. IP 주소 형식 차단
   if (isIPAddress(hostname)) {
-    throw new CError("IP addresses are not allowed", HTTP_STATUS_CODE.BAD_REQUEST);
+    return helpers.error("string.ssrfUnsafe");
   }
 
   return value;
