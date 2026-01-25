@@ -1,11 +1,12 @@
 import GetPickBlogCardParamDTO from "@dto/blog/get-pick-blog-card.param.dto";
 import { RequestDTOHandler } from "@my-types/express.type";
 import { GetPickBlogCardParam, Theme } from "@my-types/params/blog.param.type";
+import { urlScheme } from "@validators/url.schema";
 import Joi from "joi";
 
 export const getPickBlogCardSchema = Joi.object<GetPickBlogCardParam>().keys({
-  postUrl: Joi.string().uri().required(),
-  rss: Joi.string().uri().required(),
+  postUrl: urlScheme.required(),
+  rss: urlScheme.required(),
   theme: Joi.string().valid(Theme.DARK, Theme.LIGHT).optional(),
 });
 
