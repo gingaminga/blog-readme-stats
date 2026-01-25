@@ -10,15 +10,17 @@ RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)�
 
 ## 🚀 사용 방법
 
-### 최신 글 카드
+### 1️⃣ 최신 글 카드
 
-블로그의 최신 포스트를 카드 형태로 표시할 수 있습니다.
+블로그의 가장 최근 포스트를 카드로 표시합니다.
 
-> `?url=` 파라미터에 블로그의 RSS 피드 URL을 입력하세요.
+**기본 사용법**
 
-#### 기본 사용법
+```markdown
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL)
+```
 
-**카드만 표시:**
+**예시**
 
 ```markdown
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)
@@ -26,43 +28,92 @@ RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)�
 
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)
 
-**링크와 함께 사용 (카드 클릭 시 링크로 이동):**
+### 2️⃣ 특정 글 카드
+
+원하는 특정 포스트를 선택하여 카드로 표시합니다.
+
+**기본 사용법**
 
 ```markdown
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://dev-gingaminga.tistory.com)
+![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=YOUR_RSS_FEED_URL&postUrl=YOUR_POST_URL)
 ```
 
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://dev-gingaminga.tistory.com)
-
-**최신 글 링크와 함께 사용 (카드 클릭 시 최신 글로 이동):**
-
-`https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=YOUR_RSS_FEED_URL`는 가장 최신 글의 URL을 반환합니다.
+**예시**
 
 ```markdown
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=https://dev-gingaminga.tistory.com/rss)
+![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=https://dev-gingaminga.tistory.com/rss&postUrl=https://dev-gingaminga.tistory.com/7)
 ```
 
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=https://dev-gingaminga.tistory.com/rss)
+![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=https://dev-gingaminga.tistory.com/rss&postUrl=https://dev-gingaminga.tistory.com/7)
 
-#### 다크/라이트 테마 지정
+### 3️⃣ 글 리스트 카드
 
-> 옵션: `&theme=dark` 또는 `&theme=light`
+여러 포스트를 리스트 형태로 표시합니다.
 
-테마를 지정하지 않으면 시스템 설정에 따라 자동으로 테마가 적용됩니다.
-테마를 지정하고 싶다면 아래처럼 사용하세요.
-
-**다크 테마:**
+**기본 사용법**
 
 ```markdown
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=dark)](https://dev-gingaminga.tistory.com)
+![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=YOUR_RSS_FEED_URL)
+```
+
+**예시 (기본 5개)**
+
+```markdown
+![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=https://dev-gingaminga.tistory.com/rss)
+```
+
+![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=https://dev-gingaminga.tistory.com/rss)
+
+**개수 지정 (1~10개)**
+
+```markdown
+![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=YOUR_RSS_FEED_URL&count=3)
+```
+
+![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=https://dev-gingaminga.tistory.com/rss&count=3)
+
+### 4️⃣ 카드 클릭 시 링크 이동
+
+카드를 클릭 가능한 링크로 만들 수 있습니다.
+
+**블로그 메인으로 이동**
+
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL)](YOUR_BLOG_URL)
+```
+
+**최신 글로 자동 이동**
+
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=YOUR_RSS_FEED_URL)
+```
+
+**특정 글로 이동**
+
+```markdown
+[![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=YOUR_RSS_FEED_URL&postUrl=YOUR_POST_URL)](YOUR_POST_URL)
+```
+
+[![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=https://dev-gingaminga.tistory.com/rss&postUrl=https://dev-gingaminga.tistory.com/7)](https://dev-gingaminga.tistory.com/7)
+
+### 5️⃣ 테마 설정 방법
+
+모든 카드에 `&theme=dark` 또는 `&theme=light` 파라미터를 추가하여 테마를 지정할 수 있습니다.
+
+테마를 지정하지 않으면 시스템 설정에 따라 자동으로 적용됩니다.
+
+**다크 테마 예시**
+
+```markdown
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL&theme=dark)
 ```
 
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=dark)
 
-**라이트 테마:**
+**라이트 테마 예시**
 
 ```markdown
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=light)](https://dev-gingaminga.tistory.com)
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL&theme=light)
 ```
 
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=light)
