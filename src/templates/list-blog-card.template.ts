@@ -153,12 +153,12 @@ export function generateBlogListCardSVG(data: BlogListCardData, theme?: Theme): 
       const yOffset = headerHeight + index * itemHeight;
 
       // 태그 처리
-      const maxTagWidth = 280; // 전체 450 - 좌측 여백 20 - 날짜 영역 150
-      let tagX = 170;
+      const maxTagWidth = 340; // 전체 450 - 좌측 여백 20 - 날짜 영역 90
+      let tagX = 110;
       const tagElements = post.tags
         .slice(0, 3)
         .map((tag) => {
-          const tagWidth = Math.max(60, Math.min(tag.length * 7 + 12, 100));
+          const tagWidth = Math.max(60, Math.min(tag.length * 7 + 12, 80));
           if (tagX + tagWidth > maxTagWidth + 170) return "";
 
           const tagElement = `
