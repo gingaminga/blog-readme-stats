@@ -128,7 +128,7 @@ export function generateBlogListCardSVG(data: BlogListCardData, theme?: Theme): 
   const faviconClipPath = hasFavicon
     ? `<defs>
       <clipPath id="profileClip">
-        <circle cx="30" cy="30" r="16"/>
+        <circle cx="30" cy="30" r="8"/>
       </clipPath>
       </defs>
     `
@@ -137,10 +137,10 @@ export function generateBlogListCardSVG(data: BlogListCardData, theme?: Theme): 
   const faviconElements = hasFavicon
     ? `
   <!-- 프로필 배경 (원형) -->
-  <circle cx="30" cy="30" r="16" fill="#ffffff" stroke="var(--border-color)" stroke-width="1"/>
+  <circle cx="30" cy="30" r="8" fill="#ffffff" stroke="var(--border-color)" stroke-width="1"/>
 
   <!-- 프로필 이미지 -->
-  <image x="14" y="14" width="32" height="32" href="data:image/png;base64,${faviconBase64}" clip-path="url(#profileClip)"/>`
+  <image x="22" y="22" width="16" height="16" href="data:image/png;base64,${faviconBase64}" clip-path="url(#profileClip)" preserveAspectRatio="xMidYMid slice"/>`
     : "";
 
   /* 블로그 글 리스트 생성 */
@@ -208,7 +208,7 @@ export function generateBlogListCardSVG(data: BlogListCardData, theme?: Theme): 
 
     <!-- 프로필 영역 -->
     ${faviconElements}
-    <text x="56" y="37" font-size="16" font-weight="600" fill="var(--text-color)">
+    <text x="44" y="32" font-size="16" font-weight="600" fill="var(--text-color)" dominant-baseline="middle">
       ${escapeXml(blogName)}
     </text>
 
