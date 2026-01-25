@@ -28,7 +28,7 @@ const LIGHT_THEME: ThemeColors = {
 
 const DARK_THEME: ThemeColors = {
   bgColor: "#202830",
-  borderColor: "#000000",
+  borderColor: "#31373D",
   descriptionColor: "#959595",
   tagBgColor: "#6366F1",
   textColor: "#F9FAFB",
