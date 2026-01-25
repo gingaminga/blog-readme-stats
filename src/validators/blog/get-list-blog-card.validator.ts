@@ -5,6 +5,7 @@ import { urlScheme } from "@validators/url.schema";
 import Joi from "joi";
 
 export const getListBlogCardSchema = Joi.object<GetListBlogCardParam>().keys({
+  count: Joi.number().integer().min(1).max(10).optional().default(5),
   rss: urlScheme.required(),
   theme: Joi.string().valid(Theme.DARK, Theme.LIGHT).optional(),
 });

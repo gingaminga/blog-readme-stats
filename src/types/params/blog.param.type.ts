@@ -4,6 +4,7 @@ export const enum Theme {
 }
 
 export interface GetListBlogCardParam {
+  count?: number;
   rss: string;
   theme?: Theme;
 }

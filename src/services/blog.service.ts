@@ -41,7 +41,7 @@ export class BlogService implements IBlogService {
    * @description RSS에서 최신 블로그 글 목록으로 리스트 카드 생성
    */
   async createListBlogCard(params: GetListBlogCardParamDTO): Promise<GetListBlogCardResponseDTO> {
-    const { rss, theme } = params;
+    const { count, rss, theme } = params;
 
     const feed = await this.parseRssFeed(rss);
 
@@ -49,8 +49,7 @@ export class BlogService implements IBlogService {
       throw new CError("No posts found in the RSS feed", HTTP_STATUS_CODE.BAD_REQUEST);
     }
 
-    // 최대 5개
-    const posts = feed.items.slice(0, 5).map((item) => {
+    const posts = feed.items.slice(0, count).map((item) => {
       const postTitle = item.title || "";
       const tags = item.categories || [];
       const date = this.formatDate(item.pubDate || item.isoDate);
