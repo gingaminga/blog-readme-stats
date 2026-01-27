@@ -8,6 +8,8 @@
 
 RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)에서 사용할 수 있습니다.
 
+> 💡 **[이 프로젝트의 제작기가 궁금하다면?](https://dev-gingaminga.tistory.com/7)**
+
 ## 🚀 사용 방법
 
 ### 1️⃣ 최신 글 카드
