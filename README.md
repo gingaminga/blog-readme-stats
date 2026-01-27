@@ -8,37 +8,31 @@
 
 RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)에서 사용할 수 있습니다.
 
+> 💡 **[이 프로젝트의 제작기가 궁금하다면?](https://dev-gingaminga.tistory.com/7)**
+
 ## 🚀 사용 방법
 
 ### 1️⃣ 최신 글 카드
 
 블로그의 가장 최근 포스트를 카드로 표시합니다.
 
-**기본 사용법**
-
-```markdown
-![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL)
-```
-
-**예시**
-
 ```markdown
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)
 ```
 
-![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)
+#### 최신 글로 자동 이동
+
+마크다운 문법을 사용해 최신 글로 자동 이동되는 기능을 추가할 수 있습니다.
+
+```markdown
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=https://dev-gingaminga.tistory.com/rss)
+```
+
+[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=https://dev-gingaminga.tistory.com/rss)
 
 ### 2️⃣ 특정 글 카드
 
 원하는 특정 포스트를 선택하여 카드로 표시합니다.
-
-**기본 사용법**
-
-```markdown
-![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=YOUR_RSS_FEED_URL&postUrl=YOUR_POST_URL)
-```
-
-**예시**
 
 ```markdown
 ![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=https://dev-gingaminga.tistory.com/rss&postUrl=https://dev-gingaminga.tistory.com/7)
@@ -50,14 +44,6 @@ RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)�
 
 여러 포스트를 리스트 형태로 표시합니다.
 
-**기본 사용법**
-
-```markdown
-![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=YOUR_RSS_FEED_URL)
-```
-
-**예시 (기본 5개)**
-
 ```markdown
 ![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=https://dev-gingaminga.tistory.com/rss)
 ```
@@ -67,53 +53,28 @@ RSS 피드를 지원하는 모든 블로그(Tistory, Medium, Naver GitHub 등)�
 **개수 지정 (1~10개)**
 
 ```markdown
-![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=YOUR_RSS_FEED_URL&count=3)
+![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=https://dev-gingaminga.tistory.com/rss&count=3)
 ```
 
 ![Blog List](https://blog-readme-stats-one.vercel.app/api/blog/card/list?rss=https://dev-gingaminga.tistory.com/rss&count=3)
 
-### 4️⃣ 카드 클릭 시 링크 이동
+### 4️⃣ 테마 설정 방법
 
-카드를 클릭 가능한 링크로 만들 수 있습니다.
-
-**블로그 메인으로 이동**
-
-```markdown
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL)](YOUR_BLOG_URL)
-```
-
-**최신 글로 자동 이동**
-
-```markdown
-[![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL)](https://blog-readme-stats-one.vercel.app/api/blog/redirect?url=YOUR_RSS_FEED_URL)
-```
-
-**특정 글로 이동**
-
-```markdown
-[![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=YOUR_RSS_FEED_URL&postUrl=YOUR_POST_URL)](YOUR_POST_URL)
-```
-
-[![Blog Post](https://blog-readme-stats-one.vercel.app/api/blog/card/pick?rss=https://dev-gingaminga.tistory.com/rss&postUrl=https://dev-gingaminga.tistory.com/7)](https://dev-gingaminga.tistory.com/7)
-
-### 5️⃣ 테마 설정 방법
-
-모든 카드에 `&theme=dark` 또는 `&theme=light` 파라미터를 추가하여 테마를 지정할 수 있습니다.
-
+모든 카드에는 `&theme=dark` 또는 `&theme=light` 파라미터를 추가하여 테마를 지정할 수 있습니다.  
 테마를 지정하지 않으면 시스템 설정에 따라 자동으로 적용됩니다.
 
-**다크 테마 예시**
+**다크 테마**
 
 ```markdown
-![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL&theme=dark)
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=dark)
 ```
 
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=dark)
 
-**라이트 테마 예시**
+**라이트 테마**
 
 ```markdown
-![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=YOUR_RSS_FEED_URL&theme=light)
+![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=light)
 ```
 
 ![Blog Card](https://blog-readme-stats-one.vercel.app/api/blog/card?url=https://dev-gingaminga.tistory.com/rss&theme=light)
